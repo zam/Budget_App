@@ -64,7 +64,7 @@ function deposit(user, amount) {
 function withdraw(user, amount) {
     amount = parseInt(amount)
 
-    if (user.balance < amount)
+    if (user.balance-amount < 0)
         alert('Insufficient balance')
     else{
         user.balance -= amount;
@@ -448,7 +448,11 @@ function login (user){
         }
     })
 
-
+    if (user.expenseitems.length !== 0){
+        for (let x = 0; x < user.expenseitems.length; x++){
+            addExpenseItem(user.expenseitems[x].name, user.expenseitems[x].cost);
+        }
+    }
 
 }    
 
@@ -501,7 +505,8 @@ function createExpenseItem (name, cost, owner) {
     let user_info = userList.find(element => element.username === owner);
     user_info.expenseitems.push(newExpenseItem);
 
-    expense_item_div = document.createElement('div');
+    addExpenseItem(name, cost)
+   /*  expense_item_div = document.createElement('div');
     expense_item_div.classList.add('expense-item-div');
 
     expense_item_name = document.createElement('p');
@@ -513,26 +518,37 @@ function createExpenseItem (name, cost, owner) {
     expense_item_cost.classList.add('expense-item-cost');
 
 
-    update_button = document.createElement('button');
-    update_button.innerHTML = 'UPDATE';
-    update_button.classList.add('update-button');
-    update_button.addEventListener('click', function () {
-        updateExpense(this.parentNode, user_info);
-    });
+    update_name_button = document.createElement('button');
+    update_name_button.innerHTML = '✏️';
+    update_name_button.classList.add('update-button');
+
+    update_cost_button = document.createElement('button');
+    update_cost_button.innerHTML = '✏️';
+    update_cost_button.classList.add('update-button');
+    
 
     delete_button = document.createElement('button');
     delete_button.innerHTML = 'DELETE';
     delete_button.classList.add('delete-button');
     delete_button.addEventListener('click', function () {
-        deleteExpense(this.parentNode, user_info);
+        deleteExpense(this.parentNode);
     });
 
-    expense_item_div.appendChild(expense_item_name)
+    expense_item_div.appendChild(update_name_button);
+    expense_item_div.appendChild(expense_item_name);
+    expense_item_div.appendChild(update_cost_button);
     expense_item_div.appendChild(expense_item_cost);
-    expense_item_div.appendChild(update_button);
     expense_item_div.appendChild(delete_button);
 
-    document.querySelector('.expense-list').appendChild(expense_item_div)
+    update_name_button.addEventListener('click', function () {
+        updateName(this.parentNode)
+    });
+    update_cost_button.addEventListener('click', function () {
+        updateCost(this.parentNode)
+    });
+
+
+    document.querySelector('.expense-list').appendChild(expense_item_div) */
 
     user_info.balance -= cost;
     balance_p.innerHTML = `Balance: $${user_info.balance.toFixed(2)}`;
@@ -555,19 +571,107 @@ function deleteExpense (ele) {
 }
 
 
-function updateExpense (ele) {
+function updateName (element) {
     let user_info = userList.find(element => element.username === document.querySelector('.user-name').innerHTML)
-    exp_cost = ele.querySelector('.expense-item-cost').innerHTML;
-    exp_cost = parseInt(exp_cost.substring(1));
-    exp_name = ele.querySelector('.expense-item-name').innerHTML;
-
+    let current_name = element.querySelector('.expense-item-name').innerHTML;
     let index = user_info.expenseitems.findIndex(
-            element => (element.name === exp_name && element.cost === exp_cost)
-    ); 
-
+        obj => (obj.name === current_name)
+    );
     
+    do {
+        new_name = window.prompt('Enter new expense name');
+        check_new_name = user_info.expenseitems.find(
+            obj => (obj.name === new_name)
+        );
+        if (check_new_name === undefined){
+            isValid = true;
+        }else{
+            isValid = false;
+        }
+        check_length =  new_name.length > 1;
+        
+        console.log(check_length);
+        console.log(isValid);
+    } while ( isValid === false || new_name.length <= 0 )
 
-    console.log(`index is ${index}`)
+    element.querySelector('.expense-item-name').innerHTML = new_name;
+    user_info.expenseitems[index].name = new_name;
+}
 
+function updateCost (element) {
+    let user_info = userList.find(element => element.username === document.querySelector('.user-name').innerHTML)
+    let current_name = element.querySelector('.expense-item-name').innerHTML;
+    let index = user_info.expenseitems.findIndex(
+        obj => (obj.name === current_name)
+    );
+    
+    do {
+        new_cost = window.prompt('Enter new cost');
+        new_cost = parseInt(new_cost);
+    } while (new_cost <= 0);
+
+    old_cost = user_info.expenseitems[index].cost;
+
+    if (new_cost > old_cost){
+        cost_diff = new_cost - old_cost;
+        user_info.expenseitems[index].cost = new_cost;
+        user_info.balance -= cost_diff;
+        element.querySelector('.expense-item-cost').innerHTML = `$${new_cost}`;
+        balance_p.innerHTML = `Balance: $${user_info.balance.toFixed(2)}`;
+    }else if (new_cost < old_cost){
+        cost_diff = old_cost - new_cost;
+        user_info.expenseitems[index].cost = new_cost;
+        user_info.balance += cost_diff;
+        element.querySelector('.expense-item-cost').innerHTML = `$${new_cost}`;
+        balance_p.innerHTML = `Balance: $${user_info.balance.toFixed(2)}`;
+    }
 
 } 
+
+function addExpenseItem (name, cost) {
+
+    expense_item_div = document.createElement('div');
+    expense_item_div.classList.add('expense-item-div');
+
+    expense_item_name = document.createElement('p');
+    expense_item_name.innerHTML = name;
+    expense_item_name.classList.add('expense-item-name');
+
+    expense_item_cost = document.createElement('p');
+    expense_item_cost.innerHTML = `$${cost}`;
+    expense_item_cost.classList.add('expense-item-cost');
+
+
+    update_name_button = document.createElement('button');
+    update_name_button.innerHTML = '✏️';
+    update_name_button.classList.add('update-button');
+
+    update_cost_button = document.createElement('button');
+    update_cost_button.innerHTML = '✏️';
+    update_cost_button.classList.add('update-button');
+    
+
+    delete_button = document.createElement('button');
+    delete_button.innerHTML = 'DELETE';
+    delete_button.classList.add('delete-button');
+    delete_button.addEventListener('click', function () {
+        deleteExpense(this.parentNode);
+    });
+
+    expense_item_div.appendChild(update_name_button);
+    expense_item_div.appendChild(expense_item_name);
+    expense_item_div.appendChild(update_cost_button);
+    expense_item_div.appendChild(expense_item_cost);
+    expense_item_div.appendChild(delete_button);
+
+    update_name_button.addEventListener('click', function () {
+        updateName(this.parentNode)
+    });
+    update_cost_button.addEventListener('click', function () {
+        updateCost(this.parentNode)
+    });
+
+
+    document.querySelector('.expense-list').appendChild(expense_item_div)
+
+}
