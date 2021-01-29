@@ -1,0 +1,259 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+body {
+    background-image: url("./images/piggy_bank.jpg");
+    size: 100%;
+    background-repeat: no-repeat;
+}
+
+.main-menu {
+    border-radius: 10px;
+    border-style: solid;
+    border-color: transparent;
+    border-width: 25px;
+    background-color: rgb(0, 188, 199, 0.5);
+
+    width: 30vw;
+    max-width: 350px;
+    height: 75vh;
+    max-height: 500px;
+
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+
+    display: grid;
+    grid-template-rows: 1fr 3fr 1fr;
+    align-self: center stretch;
+    justify-self: center;
+}
+
+.input-field {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 10px;
+    border-color: transparent;
+    height: 50px;
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 15px;
+    align-self: center;
+}
+
+#tabs {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.tab-elements {
+    display: block;
+    width: 50px;
+    background-color: transparent;
+    border: none;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+
+label {
+    display: block;
+    text-align: center;
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+
+.submit-button {
+    background-color: rgba(255, 255, 255, 0.5);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: bold;
+    border-radius: 7px;
+    height: 50px;
+    width: 70%;
+    display: block;
+    justify-self: center;
+}
+
+.disabled {
+    display: none !important;
+}
+
+.underlined {
+    text-decoration: underline;
+}
+
+button:focus {
+    outline: none;
+}
+
+.user-page {
+    border-radius: 10px;
+    border-style: solid;
+    border-color: transparent;
+    border-width: 25px;
+    background-color: rgba(0, 126, 199, 0.5);
+    width: 75vw;
+    height: 75vh;
+    
+
+    left: 50%;
+    top: 50%;
+    position: absolute;
+    transform: translate(-50%, -50%);
+
+    display: grid;
+    grid-template-rows: 25% 75%;
+    justify-items: center;
+    row-gap: 5px;
+}
+
+.user-menu {
+    background-color:  rgba(255, 255, 255, 0.5);
+    width: 100%;
+    border-radius: 20px;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    justify-items: center;
+}
+
+.action-menu {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    column-gap: 5px;
+
+}
+
+.menu-button {
+    width: 90%;
+    height: 75%;
+    display: block;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: white;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: bold;
+    font-size: 2.75em;
+    border-radius: 20px;
+    justify-self: center;
+    align-self: center;
+}
+
+.transact-button {
+    width: 35%;
+    height: 35%;
+    display: block;
+    background-color: rgba(0, 0, 0, 0.75);
+    color: white;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: bold;
+    font-size: 2.75em;
+    border-radius: 20px;
+    justify-self: center;
+    align-self: center;
+}
+
+.transact-input {
+    width: 60%;
+    height: 35%;
+    display: block;
+    background-color: rgba(255, 255, 255, 0.75);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: bold;
+    font-size: 2.75em;
+    border-radius: 20px;
+    align-self: center;
+    margin:auto;
+    text-align: center;
+
+}
+.logout-button {
+    background-color: rgba(216, 25, 25, 0.5);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: bold;
+    border-radius: 7px;
+    height: 50px;
+    width: 40%;
+    align-self: center;
+    grid-column-start: 5;
+    grid-column-end: 6;
+}
+
+.user-details {
+    /* background-color: pink; */
+    grid-column-start: 1;
+    grid-column-end: 3;
+    width: 100%;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+}
+
+.user-info {
+    align-self: center;
+    text-align: center;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: bolder;
+    font-size: 3em;
+}
+
+.button-list {
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 20px;
+    display: grid;
+    grid-template-rows: repeat(4, 1fr);
+    
+}
+
+.transaction-area {
+    background-color:rgba(0, 0, 0, 0.5);
+    border-radius: 10px;
+}
+
+.deposit-menu, .withdraw-menu, .send-menu {
+    height: 80%;
+    display: grid;
+    grid-template-rows: 1fr 1fr;
+    align-items: self-end;
+    justify-items: center;
+    align-self: center;
+    left: auto;
+    right: auto;
+
+}
+
+.expense-menu {
+    
+    display: grid;
+    grid-template-rows: 7.5% 92.5%;
+    height: 100%;
+    width: 100%;
+}
+
+.add-expense {
+    background-color: rgba(216, 25, 25, 0.5);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: bold;
+    border-radius: 10px;
+    height: 75%;
+    align-self: center;
+    width: 100%;
+    
+
+}
+
+
+.add-expense-area {
+    display: grid;
+    grid-template-columns: .5fr 4fr 0.5fr 2fr 2fr;
+    column-gap: 3px;
+    justify-content: center;
+    align-items: center;
+}
+
+.expense-input {
+    border-radius: 10px;
+    text-align: center;
+    height: 75%;
+}
