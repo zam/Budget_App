@@ -114,23 +114,6 @@ user_does_not_exists
 not_enough_money
 sender_does_not_exists
 receiver_does_not_exists */
-/* 
-function insert_login_form () {
-
-}
-
-function insert_ */
-
-function submitForm() {
-    button_value = document.querySelector('.submit-button').value;
-    if (button_value === 'login'){
-
-    }else if (button_value ==='register') {
-
-    }else{
-        console.log('error');
-    }
-}
 
 function changeTabs(value) {
     login_form = document.querySelector('.login-form');
@@ -309,12 +292,14 @@ function login (user){
     expense_name_input = document.createElement('input')
     expense_name_input.setAttribute('type', 'text');
     expense_name_input.classList.add('expense-input');
+    expense_name_input.id = 'expense-name-input'
 
     expense_cost_label = document.createElement('label');
     expense_cost_label.innerHTML = 'Cost';
     expense_cost_input = document.createElement('input')
     expense_cost_input.setAttribute('type', 'number');
     expense_cost_input.classList.add('expense-input');
+    expense_cost_input.id = 'expense-cost-input'
 
     add_expense_button = document.createElement('button');
     add_expense_button.innerHTML = 'Add Expense';
@@ -323,6 +308,8 @@ function login (user){
     add_expense_area = document.createElement('div')
     add_expense_area.classList.add('add-expense-area');
 
+    expense_list_div = document.createElement('div');
+    expense_list_div.classList.add('expense-list');
 
 
     deposit_button = document.createElement('button');
@@ -355,10 +342,10 @@ function login (user){
     user_detail_div.classList.add('user-details');
     user_p = document.createElement('p');
     user_p.innerHTML = user.username;
-    user_p.classList.add('user-info');
+    user_p.classList.add('user-name');
     balance_p = document.createElement('p');
     balance_p.innerHTML = `Balance: $${user.balance}`;
-    balance_p.classList.add('user-info');
+    balance_p.classList.add('user-balance');
 
     logout_button = document.createElement('button');
     logout_button.classList.add('logout-button');
@@ -404,6 +391,7 @@ function login (user){
     document.querySelector('.add-expense-area').append(expense_cost_label);
     document.querySelector('.add-expense-area').append(expense_cost_input);
     document.querySelector('.add-expense-area').append(add_expense_button);
+    document.querySelector('.expense-menu').append(expense_list_div);
 
 
 
@@ -431,6 +419,33 @@ function login (user){
         var amt = document.querySelector('#send-input').value;
         var recp = document.querySelector('#recipient-input').value;
         send(user, recp, amt);
+    })
+
+    add_expense_button.addEventListener('click', function() {
+        var exp_name = document.querySelector('#expense-name-input').value;
+        var exp_cost = parseInt(document.querySelector('#expense-cost-input').value);
+        
+        if (exp_name.length <= 0) {
+            expNameValid = false;
+            alert('Invalid expense name');
+        }else{
+            expNameValid = true;
+        }
+        if(exp_cost < 0) {
+            expCostValid = false; 
+            alert('Invalid expense cost');
+        }else{
+            expCostValid = true;
+        }
+        if (user.expenseitems.find(element => element.name === exp_name) === undefined){
+           isUniqueName = true
+        }else{
+            isUniqueName = false;
+            alert('Expense name must be unique');
+        }
+        if (expNameValid === true && expCostValid === true && isUniqueName === true){
+            createExpenseItem(exp_name, exp_cost, user.username);
+        }
     })
 
 
@@ -481,6 +496,78 @@ function clearFields () {
     document.querySelector('#register-email').value = '';
 }
 
-function createExpenseItem (name, cost) {
+function createExpenseItem (name, cost, owner) {
+    let newExpenseItem = new ExpenseItem(name, cost, owner);
+    let user_info = userList.find(element => element.username === owner);
+    user_info.expenseitems.push(newExpenseItem);
+
+    expense_item_div = document.createElement('div');
+    expense_item_div.classList.add('expense-item-div');
+
+    expense_item_name = document.createElement('p');
+    expense_item_name.innerHTML = name;
+    expense_item_name.classList.add('expense-item-name');
+
+    expense_item_cost = document.createElement('p');
+    expense_item_cost.innerHTML = `$${cost}`;
+    expense_item_cost.classList.add('expense-item-cost');
+
+
+    update_button = document.createElement('button');
+    update_button.innerHTML = 'UPDATE';
+    update_button.classList.add('update-button');
+    update_button.addEventListener('click', function () {
+        updateExpense(this.parentNode, user_info);
+    });
+
+    delete_button = document.createElement('button');
+    delete_button.innerHTML = 'DELETE';
+    delete_button.classList.add('delete-button');
+    delete_button.addEventListener('click', function () {
+        deleteExpense(this.parentNode, user_info);
+    });
+
+    expense_item_div.appendChild(expense_item_name)
+    expense_item_div.appendChild(expense_item_cost);
+    expense_item_div.appendChild(update_button);
+    expense_item_div.appendChild(delete_button);
+
+    document.querySelector('.expense-list').appendChild(expense_item_div)
+
+    user_info.balance -= cost;
+    balance_p.innerHTML = `Balance: $${user_info.balance.toFixed(2)}`;
+
 
 }
+
+function deleteExpense (ele) {
+
+    let user_info = userList.find(element => element.username === document.querySelector('.user-name').innerHTML)
+    exp_cost = ele.querySelector('.expense-item-cost').innerHTML;
+    exp_name = ele.querySelector('.expense-item-name').innerHTML;
+    exp_cost = parseInt(exp_cost.substring(1));
+    
+    user_info.balance += exp_cost;
+    balance_p.innerHTML = `Balance: $${user_info.balance.toFixed(2)}`;
+    user_info.expenseitems = user_info.expenseitems.filter(obj => obj.name !== exp_name && obj.cost !== exp_cost)
+
+    ele.remove();
+}
+
+
+function updateExpense (ele) {
+    let user_info = userList.find(element => element.username === document.querySelector('.user-name').innerHTML)
+    exp_cost = ele.querySelector('.expense-item-cost').innerHTML;
+    exp_cost = parseInt(exp_cost.substring(1));
+    exp_name = ele.querySelector('.expense-item-name').innerHTML;
+
+    let index = user_info.expenseitems.findIndex(
+            element => (element.name === exp_name && element.cost === exp_cost)
+    ); 
+
+    
+
+    console.log(`index is ${index}`)
+
+
+} 

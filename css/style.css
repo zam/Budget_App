@@ -190,7 +190,7 @@ button:focus {
     grid-template-rows: 1fr 1fr;
 }
 
-.user-info {
+.user-name, .user-balance {
     align-self: center;
     text-align: center;
     font-family: 'Noto Sans JP', sans-serif;
@@ -231,7 +231,7 @@ button:focus {
     width: 100%;
 }
 
-.add-expense {
+.add-expense, .delete-button {
     background-color: rgba(216, 25, 25, 0.5);
     font-family: 'Noto Sans JP', sans-serif;
     font-weight: bold;
@@ -239,8 +239,6 @@ button:focus {
     height: 75%;
     align-self: center;
     width: 100%;
-    
-
 }
 
 
@@ -256,4 +254,37 @@ button:focus {
     border-radius: 10px;
     text-align: center;
     height: 75%;
+}
+
+.expense-list {
+    display: grid;
+    overflow: scroll;
+    grid-template-rows: repeat(12, 1fr);
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    justify-items: center;
+}
+.expense-list::-webkit-scrollbar {
+    display: none;
+}
+
+.expense-item-div {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: bold;
+    border-radius: 10px;
+    background-color: rgba(255, 255, 255, 0.5);
+    display: grid;
+    grid-template-columns: 5fr 2fr 2fr 2fr;
+    width: 90%;
+    
+}
+
+.update-button {
+    background-color: rgba(25, 216, 51, 0.5);
+    font-family: 'Noto Sans JP', sans-serif;
+    font-weight: bold;
+    border-radius: 10px;
+    height: 75%;
+    align-self: center;
+    width: 100%;
 }
